@@ -23,10 +23,10 @@ public class GameManager : MonoBehaviour
     public static GameManager instance = null;
     public GameStatus m_gameStatus = GameStatus.NotStarted;
 
-    float m_difficultyIncrementTime = 15.0f;
+    [SerializeField] float m_difficultyIncrementTime = 15.0f;
     float m_timeSinceLastIncrement = 0.0f;
-    float m_increments = 0.1f;
-    float m_maxDifficulty = 5.0f;
+    [SerializeField] float m_increments = 0.1f;
+    [SerializeField] float m_maxDifficulty = 5.0f;
 
     public void startGame()
     {
@@ -87,6 +87,10 @@ public class GameManager : MonoBehaviour
         {
             m_timeSinceLastIncrement = 0;
             Time.timeScale += m_increments;
+        }
+        if (Time.timeScale > m_maxDifficulty)
+        {
+            Time.timeScale = m_maxDifficulty;
         }
     }
 }
