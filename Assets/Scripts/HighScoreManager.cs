@@ -17,6 +17,9 @@ public class HighScoreManager : MonoBehaviour
     List<HighScoreData> m_highScore;
     ShowHighScores m_scoreRenderer = null;
 
+    int m_scoreToAdd = 0;
+    int m_indexToAdd = 0;
+
     private void Awake()
     {
         if (instance)
@@ -30,12 +33,26 @@ public class HighScoreManager : MonoBehaviour
         m_highScore = new List<HighScoreData>();
     }
 
+    public bool playerOnBoard(int score)
+    {
+        return score > m_highScore[m_highScoreCount - 1].score;
+    }
+
     public void setScoreRenderer(ShowHighScores _scoreRenderer)
     {
         m_scoreRenderer = _scoreRenderer;
     }
 
-    public int checkHighScore(int newScore)
+    public bool checkHighScore(int score)
+    {
+        if (m_highScore.Count < m_highScoreCount)
+        {
+            return true;
+        }
+        return score > m_highScore[m_highScoreCount - 1].score;
+    }
+
+    public int assignHighScore(int newScore)
     {
         for (int i = 0; i < m_highScoreCount; ++i)
         {
@@ -56,13 +73,24 @@ public class HighScoreManager : MonoBehaviour
 
     void addHighScore(int newScore, int index)
     {
+        m_scoreToAdd = newScore;
+        m_indexToAdd = index;
+        GameManager.instance.m_nameInput.SetActive(true);
+    }
+
+    public void submitHighScore()
+    {
+        GameManager.instance.m_nameInput.SetActive(false);
         HighScoreData highScoreData = new HighScoreData()
         {
             name = m_scoreRenderer.getName(),
-            score = newScore
+            score = m_scoreToAdd
         };
-        m_highScore.Insert(index, highScoreData);
-        m_scoreRenderer.renderScores(m_highScore, index);
+        m_highScore.Insert(m_indexToAdd, highScoreData);
+        m_scoreRenderer.renderScores(m_highScore, m_indexToAdd);
+
+        GameManager.instance.m_gameOverObject.SetActive(true);
+        GameManager.instance.m_gameStatus = GameManager.GameStatus.GameOver;
     }
 
     public HighScoreData[] getHighScores()

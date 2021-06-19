@@ -4,54 +4,78 @@ using UnityEngine;
 
 public class ScrollObstacle : Scroll
 {
+    [SerializeField] ScrollObstacle m_counterPart = null;
     [SerializeField] ScoreManager m_scoreManager = null;
     [SerializeField] GameObject[] m_allElements = null;
     [SerializeField] float[] m_endPosPerObstacle;
+    [SerializeField] float[] m_spawnNextPosPerObstacle;
     [SerializeField] TutorialManager m_tutorialManager = null;
     int m_currentObstacleIndex = 0;
+    [SerializeField] bool m_activeObstacle = false;
+    [SerializeField] int m_overrideObstacle = -1;
 
-    private void Start()
+    void Start()
     {
-        selectObstacle();
-        if (m_tutorialManager.m_tutorialActive)
-        {
-            m_elements[0].transform.position += Vector3.right * 30;
-        }
+        StartCoroutine(lateStart());
     }
 
-    protected override bool checkEndPosReached(GameObject element)
+    //ensure the tutorial is set up before the obstacles start
+    IEnumerator lateStart()
     {
-        return element.transform.position.x <= m_endPosPerObstacle[m_currentObstacleIndex];
+        yield return null;
+        if (m_activeObstacle)
+        {
+            selectObstacle();
+            if (m_tutorialManager.m_tutorialActive )
+            {
+                m_elements[0].transform.position += Vector3.right * 30;
+            }
+        }
     }
 
     protected override void resetPosition(GameObject element)
     {
+        m_elements = new GameObject[0];
+        base.resetPosition(element);
+    }
+
+    protected override bool checkEndPosReached(GameObject element)
+    {
+        if (element.transform.position.x <= m_spawnNextPosPerObstacle[m_currentObstacleIndex] && m_activeObstacle)
+        {
+            readyForNext();
+        }
+        return element.transform.position.x <= m_endPosPerObstacle[m_currentObstacleIndex];
+    }
+
+    protected void readyForNext()
+    {
+        m_activeObstacle = false;
         if (m_tutorialManager.m_tutorialActive)
         {
-            StartCoroutine(delayObstacle(element));
+            StartCoroutine(delayObstacle());
         }
         else
         {
-            sendObstacle(element);
+            m_counterPart.selectObstacle();
         }
     }
 
-    IEnumerator delayObstacle(GameObject obstacle)
+    IEnumerator delayObstacle()
     {
         yield return new WaitForSeconds(1);
-        sendObstacle(obstacle);
+        m_counterPart.selectObstacle();
         yield return null;
     }
 
-    void sendObstacle(GameObject obstacle)
+    public void selectObstacle()
     {
-        base.resetPosition(obstacle);
-        selectObstacle();
-    }
-
-    void selectObstacle()
-    {
-        if (m_tutorialManager.m_tutorialActive)
+        m_activeObstacle = true;
+        if (m_overrideObstacle != -1)
+        {
+            m_currentObstacleIndex = m_overrideObstacle;
+        }
+        else if (m_tutorialManager.m_tutorialActive)
         {
             m_currentObstacleIndex = m_tutorialManager.getTutorialObstacle();
         }

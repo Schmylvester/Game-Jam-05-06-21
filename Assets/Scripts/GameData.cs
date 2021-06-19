@@ -15,6 +15,7 @@ public class GameData : MonoBehaviour
     public TutorialManager m_tutorialManager = null;
     public bool m_playTutorialOnReload = false;
     string m_filePath;
+    [SerializeField] bool m_clearDataOnPlay = false;
 
     private void Awake()
     {
@@ -30,7 +31,7 @@ public class GameData : MonoBehaviour
     void Start()
     {
         m_filePath = Application.persistentDataPath + "/" + "highScores.txt";
-        if (File.Exists(m_filePath))
+        if (File.Exists(m_filePath) && !m_clearDataOnPlay)
         {
             // read it and put it in the high scores
             BinaryFormatter formatter = new BinaryFormatter();
@@ -45,8 +46,61 @@ public class GameData : MonoBehaviour
         {
             activateTutorial();
             FileStream stream = new FileStream(m_filePath, FileMode.Create);
+            populateFakeHighScores();
             stream.Close();
         }
+    }
+
+    string getRandomName()
+    {
+        string[] names = new string[]
+        {
+            "Thomas",
+            "Sasha",
+            "Arthur",
+            "Bryn",
+            "Joel",
+            "Alex",
+            "Ryan",
+            "Andy",
+            "Joe",
+            "Sam",
+            "Amy",
+            "Stephie",
+            "Pri",
+            "Emma",
+            "Xavier",
+            "Rich"
+        };
+        return names[Random.Range(0, names.Length - 1)];
+    }
+
+    void populateFakeHighScores()
+    {
+        HighScoreData[] data = new HighScoreData[]
+        {
+            new HighScoreData {
+                name = getRandomName(),
+                score = 15
+            },
+            new HighScoreData {
+                name = getRandomName(),
+                score = 12
+            },
+            new HighScoreData {
+                name = getRandomName(),
+                score = 9
+            },
+            new HighScoreData {
+                name = getRandomName(),
+                score = 6
+            },
+            new HighScoreData {
+                name = getRandomName(),
+                score = 3
+            }
+        };
+        HighScoreManager.instance.loadHighScores(data);
     }
 
     void activateTutorial()

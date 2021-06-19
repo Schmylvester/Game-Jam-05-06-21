@@ -7,6 +7,7 @@ public class ShowHighScores : MonoBehaviour
 {
     [SerializeField] Text[] m_highScoreNames = null;
     [SerializeField] Text[] m_highScoreScores = null;
+    [SerializeField] InputField m_nameInput = null;
 
     void Start()
     {
@@ -15,7 +16,7 @@ public class ShowHighScores : MonoBehaviour
 
     public string getName()
     {
-        return "Martin";
+        return m_nameInput.text;
     }
 
     public void renderScores(List<HighScoreData> _scores, int highlightPlayer = -1)

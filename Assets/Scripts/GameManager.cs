@@ -9,13 +9,15 @@ public class GameManager : MonoBehaviour
     {
         NotStarted = 0,
         Active,
+        NameInput,
         GameOver
     }
 
     [SerializeField] InputManager m_inputManager = null;
     [SerializeField] Animator m_playerAnimator = null;
     [SerializeField] GameObject m_tapToStartText = null;
-    [SerializeField] GameObject m_gameOverText = null;
+    public GameObject m_gameOverObject = null;
+    public GameObject m_nameInput = null;
     [SerializeField] ScoreManager m_scoreManager = null;
     [SerializeField] GameObject m_tutorialText = null;
     [SerializeField] TutorialManager m_tutorialManager = null;
@@ -43,10 +45,23 @@ public class GameManager : MonoBehaviour
     public void gameOver()
     {
         m_tutorialText.SetActive(false);
-        m_gameOverText.SetActive(true);
-        m_gameStatus = GameStatus.GameOver;
+
+        if (HighScoreManager.instance.checkHighScore(m_scoreManager.getScore()))
+        {
+            m_gameStatus = GameStatus.NameInput;
+        }
+        else
+        {
+            m_gameOverObject.SetActive(true);
+            m_gameStatus = GameStatus.GameOver;
+        }
+        HighScoreManager.instance.assignHighScore(m_scoreManager.getScore());
         m_playerAnimator.SetBool("running", false);
-        HighScoreManager.instance.checkHighScore(m_scoreManager.getScore());
+    }
+
+    public void submitHighScore()
+    {
+        HighScoreManager.instance.submitHighScore();
     }
 
     private void Awake()
