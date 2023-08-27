@@ -16,7 +16,7 @@ public class ShowHighScores : MonoBehaviour
 
     public string getName()
     {
-        return m_nameInput.text == "" ? GameData.instance.getRandomName() : m_nameInput.text;
+        return m_nameInput.text == "" ? GameData.instance.getRandomNames()[0] : m_nameInput.text;
     }
 
     public void renderScores(List<HighScoreData> _scores, int highlightPlayer = -1)

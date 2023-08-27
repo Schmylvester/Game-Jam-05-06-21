@@ -2,11 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+struct DeathTweenSettings {
+    public float timeToTake;
+    public float endValue;
+}
+
 public class PlayerAnimator : MonoBehaviour
 {
     [SerializeField] private Animator m_animator = null;
     private bool m_isBig = false;
     private JumpState m_animState = JumpState.OnGround;
+    bool m_animEnabled = true;
 
     public void gameStart() {
         onUpdateState();
@@ -33,7 +40,20 @@ public class PlayerAnimator : MonoBehaviour
         }
     }
 
+    public void die() {
+        setAnim("fall");
+        m_animEnabled = false;
+        deathTween();
+    }
+
+    void deathTween() {
+        iTween.MoveTo(gameObject, iTween.Hash("x", -0.2f, "time", 1, "islocal", true));
+        iTween.MoveTo(transform.parent.gameObject, iTween.Hash("y", -4.5f, "time", 1, "islocal", true));
+    }
+
     void setAnim(string _state) {
-        m_animator.Play("player_" + _state + (m_isBig ? "_big" : "_small"));
+        if (m_animEnabled){
+            m_animator.Play("player_" + _state + (m_isBig ? "_big" : "_small"));
+        }
     }
 }

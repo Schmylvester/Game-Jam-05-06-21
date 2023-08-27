@@ -18,7 +18,6 @@ public class GameManager : MonoBehaviour
     public GameObject m_gameOverObject = null;
     public GameObject m_nameInput = null;
     [SerializeField] ScoreManager m_scoreManager = null;
-    [SerializeField] GameObject m_tutorialText = null;
     [SerializeField] TutorialManager m_tutorialManager = null;
 
     public static GameManager instance = null;
@@ -30,19 +29,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] float m_maxDifficulty = 5.0f;
     [SerializeField] ScrollObstacle[] m_obstacles = null;
 
-    public void startGame(bool _clearData)
+    public void startGame(bool _restartTutorial)
     {
-        if (_clearData) {
+        if (_restartTutorial) {
             m_tutorialManager.resetTutorial();
         }
         m_playerAnimator.gameStart();
         m_tapToStartText.gameObject.SetActive(false);
         Time.timeScale = 1;
         m_gameStatus = GameStatus.Active;
-        if (m_tutorialManager.tutorialActive())
-        {
-            m_tutorialText.SetActive(true);
-        }
         foreach (ScrollObstacle obstacle in m_obstacles) {
             obstacle.lateStart();
         }
@@ -50,8 +45,6 @@ public class GameManager : MonoBehaviour
 
     public void gameOver()
     {
-        m_tutorialText.SetActive(false);
-
         if (HighScoreManager.instance.checkHighScore(m_scoreManager.getScore()))
         {
             m_gameStatus = GameStatus.NameInput;

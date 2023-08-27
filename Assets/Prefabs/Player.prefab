@@ -120,7 +120,6 @@ GameObject:
   - component: {fileID: 5893485929394524523}
   - component: {fileID: 5893485929394524502}
   - component: {fileID: 5893485929394524503}
-  - component: {fileID: 5893485929394524496}
   - component: {fileID: 5893485929394524500}
   - component: {fileID: 5893485929394524501}
   m_Layer: 0
@@ -173,6 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af855d6a6cce42448a439277978347fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_playerAnimator: {fileID: 0}
   m_params: {fileID: 5893485929394524523}
 --- !u!114 &5893485929394524521
 MonoBehaviour:
@@ -186,7 +186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc631491b764ee84bb16f8793aef0836, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_playerAnimator: {fileID: 5893485929394524496}
+  m_playerAnimator: {fileID: 0}
 --- !u!114 &5893485929394524523
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,19 +241,6 @@ MonoBehaviour:
   m_tutorialManager: {fileID: 0}
   m_scoreSound: {fileID: 0}
   m_scoreUI: {fileID: 0}
---- !u!114 &5893485929394524496
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5893485929394524526}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb05f82dc36e665469908da77c9e389e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controller: {fileID: 0}
 --- !u!61 &5893485929394524500
 BoxCollider2D:
   m_ObjectHideFlags: 0

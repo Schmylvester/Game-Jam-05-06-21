@@ -6,7 +6,6 @@ public class ScrollObstacle : Scroll
 {
     [SerializeField] ScrollObstacle m_counterPart = null;
     [SerializeField] ScoreManager m_scoreManager = null;
-    [SerializeField] MovingObstacle m_movingObstacle = null;
     [SerializeField] GameObject[] m_scrollableObstacles = null;
     [SerializeField] ObstacleDataManager m_obstacleDataManager = null;
     [SerializeField] TutorialManager m_tutorialManager = null;

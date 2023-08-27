@@ -8,12 +8,9 @@ public class GameData : MonoBehaviour
     [System.Serializable]
     struct DataToLoad
     {
-        public ushort tutotialProgress;
         public HighScoreData[] highScoreData;
     }
     public static GameData instance;
-    public TutorialManager m_tutorialManager = null;
-    public ushort m_tutorialReached = 0;
     string m_filePath;
     [SerializeField] bool m_clearDataOnPlay = false;
 
@@ -39,77 +36,66 @@ public class GameData : MonoBehaviour
             DataToLoad data = (DataToLoad)formatter.Deserialize(stream);
             stream.Close();
             HighScoreManager.instance.loadHighScores(data.highScoreData);
-            m_tutorialReached = data.tutotialProgress;
-            if (data.tutotialProgress < 4)
-                activateTutorial(data.tutotialProgress);
         }
         else
         {
-            activateTutorial(0);
             FileStream stream = new FileStream(m_filePath, FileMode.Create);
             populateFakeHighScores();
             stream.Close();
         }
-        m_tutorialManager.onTutorialAdvanced.AddListener(() => ++m_tutorialReached);
     }
 
-    public string getRandomName()
+    public string[] getRandomNames()
     {
         string[] names = new string[]
         {
-            "Thomas",
             "Sasha",
             "Arthur",
             "Bryn",
-            "Joel",
-            "Alex",
-            "Ryan",
-            "Andy",
-            "Joe",
             "Sam",
-            "Amy",
             "Stephie",
             "Pri",
-            "Emma",
-            "Xavier",
-            "Rich",
             "Josie"
         };
-        return names[Random.Range(0, names.Length - 1)];
+        for (int i = 0; i < 50; ++i) {
+            for (int j = 1; j < names.Length; ++j) {
+                if (Random.value < 0.5f) {
+                    var temp = names[j - 1];
+                    names[j - 1] = names[j];
+                    names[j] = temp;
+                }
+            }
+        }
+        return names;
     }
 
     void populateFakeHighScores()
     {
+        var names = getRandomNames();
         HighScoreData[] data = new HighScoreData[]
         {
             new HighScoreData {
-                name = getRandomName(),
+                name = names[0],
                 score = 15
             },
             new HighScoreData {
-                name = getRandomName(),
+                name = names[1],
                 score = 12
             },
             new HighScoreData {
-                name = getRandomName(),
+                name = names[2],
                 score = 9
             },
             new HighScoreData {
-                name = getRandomName(),
+                name = names[3],
                 score = 6
             },
             new HighScoreData {
-                name = getRandomName(),
+                name = names[4],
                 score = 3
             }
         };
         HighScoreManager.instance.loadHighScores(data);
-    }
-
-    void activateTutorial(ushort _tutorialIndex)
-    {
-        m_tutorialManager.m_currentTutorialPart = _tutorialIndex;
-        m_tutorialManager.updateText();
     }
 
     private void OnApplicationQuit()
@@ -127,7 +113,6 @@ public class GameData : MonoBehaviour
     {
         DataToLoad data = new DataToLoad()
         {
-            tutotialProgress = m_tutorialReached,
             highScoreData = HighScoreManager.instance.getHighScores()
         };
         FileStream stream = new FileStream(m_filePath, FileMode.Open);
