@@ -8,12 +8,12 @@ public class GameData : MonoBehaviour
     [System.Serializable]
     struct DataToLoad
     {
-        public bool tutorialRequired;
+        public ushort tutotialProgress;
         public HighScoreData[] highScoreData;
     }
     public static GameData instance;
     public TutorialManager m_tutorialManager = null;
-    public bool m_playTutorialOnReload = false;
+    public ushort m_tutorialReached = 0;
     string m_filePath;
     [SerializeField] bool m_clearDataOnPlay = false;
 
@@ -39,19 +39,21 @@ public class GameData : MonoBehaviour
             DataToLoad data = (DataToLoad)formatter.Deserialize(stream);
             stream.Close();
             HighScoreManager.instance.loadHighScores(data.highScoreData);
-            if (data.tutorialRequired)
-                activateTutorial();
+            m_tutorialReached = data.tutotialProgress;
+            if (data.tutotialProgress < 4)
+                activateTutorial(data.tutotialProgress);
         }
         else
         {
-            activateTutorial();
+            activateTutorial(0);
             FileStream stream = new FileStream(m_filePath, FileMode.Create);
             populateFakeHighScores();
             stream.Close();
         }
+        m_tutorialManager.onTutorialAdvanced.AddListener(() => ++m_tutorialReached);
     }
 
-    string getRandomName()
+    public string getRandomName()
     {
         string[] names = new string[]
         {
@@ -70,7 +72,8 @@ public class GameData : MonoBehaviour
             "Pri",
             "Emma",
             "Xavier",
-            "Rich"
+            "Rich",
+            "Josie"
         };
         return names[Random.Range(0, names.Length - 1)];
     }
@@ -103,17 +106,28 @@ public class GameData : MonoBehaviour
         HighScoreManager.instance.loadHighScores(data);
     }
 
-    void activateTutorial()
+    void activateTutorial(ushort _tutorialIndex)
     {
-        m_tutorialManager.m_tutorialActive = true;
-        m_playTutorialOnReload = true;
+        m_tutorialManager.m_currentTutorialPart = _tutorialIndex;
+        m_tutorialManager.updateText();
     }
 
     private void OnApplicationQuit()
     {
+        saveData();
+    }
+
+    private void OnApplicationPause(bool status)
+    {
+        if (status)
+            saveData();
+    }
+
+    void saveData()
+    {
         DataToLoad data = new DataToLoad()
         {
-            tutorialRequired = m_tutorialManager.m_tutorialActive,
+            tutotialProgress = m_tutorialReached,
             highScoreData = HighScoreManager.instance.getHighScores()
         };
         FileStream stream = new FileStream(m_filePath, FileMode.Open);

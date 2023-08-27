@@ -2,9 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerJump : MonoBehaviour
-{
-    enum JumpState
+    public enum JumpState
     {
         Null = -1,
         OnGround,
@@ -13,7 +11,9 @@ public class PlayerJump : MonoBehaviour
         Falling
     }
 
-    [SerializeField] Animator m_playerAnimator;
+public class PlayerJump : MonoBehaviour
+{
+    [SerializeField] PlayerAnimator m_playerAnimator;
     float m_groundLevel = 0.0f;
     float m_gravityForce = 0.0f;
     float m_verticalSpeed = 0.0f;
@@ -69,20 +69,7 @@ public class PlayerJump : MonoBehaviour
     void setState(JumpState _state)
     {
         m_state = _state;
-        updateAnimation(_state);
-    }
-
-    void updateAnimation(JumpState _state)
-    {
-        switch (_state)
-        {
-            case JumpState.OnGround:
-                m_playerAnimator.SetBool("jumping", false);
-                break;
-            case JumpState.Jumping:
-                m_playerAnimator.SetBool("jumping", true);
-                break;
-        }
+        m_playerAnimator.setState(_state);
     }
 
     void jumpingState()

@@ -6,31 +6,30 @@ public class ScrollObstacle : Scroll
 {
     [SerializeField] ScrollObstacle m_counterPart = null;
     [SerializeField] ScoreManager m_scoreManager = null;
-    [SerializeField] GameObject[] m_allElements = null;
-    [SerializeField] float[] m_endPosPerObstacle;
-    [SerializeField] float[] m_spawnNextPosPerObstacle;
+    [SerializeField] MovingObstacle m_movingObstacle = null;
+    [SerializeField] GameObject[] m_scrollableObstacles = null;
+    [SerializeField] ObstacleDataManager m_obstacleDataManager = null;
     [SerializeField] TutorialManager m_tutorialManager = null;
     int m_currentObstacleIndex = 0;
     [SerializeField] bool m_activeObstacle = false;
     [SerializeField] int m_overrideObstacle = -1;
 
-    void Start()
-    {
-        StartCoroutine(lateStart());
-    }
-
     //ensure the tutorial is set up before the obstacles start
-    IEnumerator lateStart()
+    public void lateStart()
     {
-        yield return null;
         if (m_activeObstacle)
         {
             selectObstacle();
-            if (m_tutorialManager.m_tutorialActive )
+            if (m_tutorialManager.tutorialActive())
             {
                 m_elements[0].transform.position += Vector3.right * 30;
             }
         }
+    }
+
+    protected override Vector3 getMovementFrameDistance() {
+        var data = m_obstacleDataManager.getData(m_currentObstacleIndex);
+        return base.getMovementFrameDistance() * data._speedMod;
     }
 
     protected override void resetPosition(GameObject element)
@@ -41,17 +40,18 @@ public class ScrollObstacle : Scroll
 
     protected override bool checkEndPosReached(GameObject element)
     {
-        if (element.transform.position.x <= m_spawnNextPosPerObstacle[m_currentObstacleIndex] && m_activeObstacle)
+        var data = m_obstacleDataManager.getData(m_currentObstacleIndex);
+        if (element.transform.position.x <= data._nextSpawnPos && m_activeObstacle)
         {
             readyForNext();
         }
-        return element.transform.position.x <= m_endPosPerObstacle[m_currentObstacleIndex];
+        return element.transform.position.x <= data._endPos;
     }
 
     protected void readyForNext()
     {
         m_activeObstacle = false;
-        if (m_tutorialManager.m_tutorialActive)
+        if (m_tutorialManager.tutorialActive())
         {
             StartCoroutine(delayObstacle());
         }
@@ -75,24 +75,24 @@ public class ScrollObstacle : Scroll
         {
             m_currentObstacleIndex = m_overrideObstacle;
         }
-        else if (m_tutorialManager.m_tutorialActive)
+        else if (m_tutorialManager.tutorialActive())
         {
             m_currentObstacleIndex = m_tutorialManager.getTutorialObstacle();
         }
         else if (m_scoreManager.getScore() > 10)
         {
-            m_currentObstacleIndex = Random.Range(0, m_allElements.Length);
+            m_currentObstacleIndex = Random.Range(0, m_scrollableObstacles.Length);
         }
         else if (m_scoreManager.getScore() > 1)
         {
-            m_currentObstacleIndex = Random.Range(0, m_allElements.Length - 1);
+            m_currentObstacleIndex = Random.Range(0, m_scrollableObstacles.Length - 1);
         }
         else
         {
             m_currentObstacleIndex = 0;
         }
 
-        GameObject selectedObstacle = m_allElements[m_currentObstacleIndex];
+        GameObject selectedObstacle = m_scrollableObstacles[m_currentObstacleIndex];
         m_elements = new GameObject[] { selectedObstacle };
     }
 }

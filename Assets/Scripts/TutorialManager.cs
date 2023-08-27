@@ -1,14 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class TutorialManager : MonoBehaviour
 {
     [SerializeField] Text m_tutorialText = null;
 
-    public bool m_tutorialActive;
-    int m_currentTutorialPart = 0;
+    public ushort m_currentTutorialPart = 4;
     string[] m_tutorialMessages = new string[]
     {
         "Tap to change size",
@@ -16,13 +16,25 @@ public class TutorialManager : MonoBehaviour
         "Jump higher when you're big",
         "Jump longer when you're small"
     };
+    public UnityEvent onTutorialAdvanced;
 
     void Start()
     {
         GameData.instance.m_tutorialManager = this;
-        if (GameData.instance.m_playTutorialOnReload)
-            m_tutorialActive = true;
-        m_tutorialText.text = m_tutorialMessages[0];
+        m_currentTutorialPart = GameData.instance.m_tutorialReached;
+        if (tutorialActive()) {
+            updateText();
+        }
+    }
+
+    public void updateText()
+    {
+        m_tutorialText.text = m_tutorialMessages[m_currentTutorialPart];
+    }
+
+    public bool tutorialActive()
+    {
+        return m_currentTutorialPart < m_tutorialMessages.Length;
     }
 
     public int getTutorialObstacle()
@@ -31,17 +43,22 @@ public class TutorialManager : MonoBehaviour
         return map[m_currentTutorialPart];
     }
 
+    public void resetTutorial() {
+        m_currentTutorialPart = 0;
+        updateText();
+    }
+
     public void advanceTutorial()
     {
-        if (m_currentTutorialPart == m_tutorialMessages.Length - 1)
+        onTutorialAdvanced.Invoke();
+        if (m_currentTutorialPart++ == m_tutorialMessages.Length - 1)
         {
             m_tutorialText.enabled = false;
-            m_tutorialActive = false;
-            GameData.instance.m_playTutorialOnReload = false;
         }
         else
         {
-            m_tutorialText.text = m_tutorialMessages[++m_currentTutorialPart];
+            m_tutorialText.text = m_tutorialMessages[m_currentTutorialPart];
+            GameData.instance.m_tutorialReached = m_currentTutorialPart;
         }
     }
 }

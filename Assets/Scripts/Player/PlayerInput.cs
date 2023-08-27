@@ -10,6 +10,7 @@ public class PlayerInput : MonoBehaviour
 
     void Update()
     {
+        if (!GameManager.instance) return;
         if (GameManager.instance.m_gameStatus == GameManager.GameStatus.Active)
         {
             if (m_inputManager.tapDownThisFrame)

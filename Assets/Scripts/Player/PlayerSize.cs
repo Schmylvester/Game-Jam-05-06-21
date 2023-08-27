@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerSize : MonoBehaviour
 {
+    [SerializeField] PlayerAnimator m_playerAnimator = null;
     [SerializeField] PlayerParams m_params = null;
     bool m_isBig = false;
 
@@ -33,6 +34,7 @@ public class PlayerSize : MonoBehaviour
         }
         transform.localScale = Vector3.one * m_params.m_bigData.scale;
         m_coroutineActive = false;
+        m_playerAnimator.changeSize(m_isBig);
         yield return null;
     }
 
@@ -46,6 +48,7 @@ public class PlayerSize : MonoBehaviour
         }
         transform.localScale = Vector3.one * m_params.m_smallData.scale;
         m_coroutineActive = false;
+        m_playerAnimator.changeSize(m_isBig);
         yield return null;
     }
 }

@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -14,7 +13,7 @@ public class GameManager : MonoBehaviour
     }
 
     [SerializeField] InputManager m_inputManager = null;
-    [SerializeField] Animator m_playerAnimator = null;
+    [SerializeField] PlayerAnimator m_playerAnimator = null;
     [SerializeField] GameObject m_tapToStartText = null;
     public GameObject m_gameOverObject = null;
     public GameObject m_nameInput = null;
@@ -29,16 +28,23 @@ public class GameManager : MonoBehaviour
     float m_timeSinceLastIncrement = 0.0f;
     [SerializeField] float m_increments = 0.1f;
     [SerializeField] float m_maxDifficulty = 5.0f;
+    [SerializeField] ScrollObstacle[] m_obstacles = null;
 
-    public void startGame()
+    public void startGame(bool _clearData)
     {
-        m_tapToStartText.SetActive(false);
-        m_playerAnimator.SetBool("running", true);
+        if (_clearData) {
+            m_tutorialManager.resetTutorial();
+        }
+        m_playerAnimator.gameStart();
+        m_tapToStartText.gameObject.SetActive(false);
         Time.timeScale = 1;
         m_gameStatus = GameStatus.Active;
-        if (m_tutorialManager.m_tutorialActive)
+        if (m_tutorialManager.tutorialActive())
         {
             m_tutorialText.SetActive(true);
+        }
+        foreach (ScrollObstacle obstacle in m_obstacles) {
+            obstacle.lateStart();
         }
     }
 
@@ -56,7 +62,6 @@ public class GameManager : MonoBehaviour
             m_gameStatus = GameStatus.GameOver;
         }
         HighScoreManager.instance.assignHighScore(m_scoreManager.getScore());
-        m_playerAnimator.SetBool("running", false);
     }
 
     public void submitHighScore()
@@ -78,18 +83,13 @@ public class GameManager : MonoBehaviour
     {
         if (m_inputManager.tapDownThisFrame)
         {
-            if (m_gameStatus == GameStatus.NotStarted)
-            {
-                m_inputManager.clearInputThisFrame();
-                startGame();
-            }
-            else if (m_gameStatus == GameStatus.GameOver)
+            if (m_gameStatus == GameStatus.GameOver)
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
         }
         if (m_gameStatus == GameStatus.Active && Time.timeScale < m_maxDifficulty
-            && !m_tutorialManager.m_tutorialActive)
+            && !m_tutorialManager.tutorialActive())
         {
             checkUpdateDifficulty();
         }

@@ -14,7 +14,7 @@ public class ScoreManager : MonoBehaviour
             m_score++;
             m_scoreSound.Play();
             m_scoreUI.text = m_score.ToString();
-            if (m_tutorialManager.m_tutorialActive && m_score % 2 == 0)
+            if (m_tutorialManager.tutorialActive() && m_score % 2 == 0)
             {
                 m_tutorialManager.advanceTutorial();
             }

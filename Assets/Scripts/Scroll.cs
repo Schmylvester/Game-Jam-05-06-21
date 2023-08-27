@@ -5,7 +5,7 @@ public class Scroll : MonoBehaviour
     [SerializeField] protected GameObject[] m_elements = null;
     [SerializeField] float m_scrollStartPos = 0.0f;
     [SerializeField] float m_scrollEndPos = 0.0f;
-    [SerializeField] float m_speed = 0.0f;
+    [SerializeField] protected float m_speed = 0.0f;
 
     void Update()
     {
@@ -13,13 +13,17 @@ public class Scroll : MonoBehaviour
         {
             foreach (GameObject element in m_elements)
             {
-                element.transform.position += Vector3.left * m_speed * Time.deltaTime;
+                element.transform.position += getMovementFrameDistance();
                 if (checkEndPosReached(element))
                 {
                     resetPosition(element);
                 }
             }
         }
+    }
+
+    protected virtual Vector3 getMovementFrameDistance() {
+        return Vector3.left * m_speed * Time.deltaTime;
     }
 
     protected virtual bool checkEndPosReached(GameObject element)
@@ -29,6 +33,7 @@ public class Scroll : MonoBehaviour
 
     protected virtual void resetPosition(GameObject element)
     {
-        element.transform.position = new Vector3(m_scrollStartPos, element.transform.position.y);
+        element.transform.position =
+            new Vector3(m_scrollStartPos, element.transform.position.y);
     }
 }
