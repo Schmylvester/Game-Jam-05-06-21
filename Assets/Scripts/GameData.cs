@@ -3,27 +3,15 @@ using UnityEngine;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
-public class GameData : MonoBehaviour
+public class GameData : Singleton<GameData>
 {
     [System.Serializable]
     struct DataToLoad
     {
         public HighScoreData[] highScoreData;
     }
-    public static GameData instance;
     string m_filePath;
     [SerializeField] bool m_clearDataOnPlay = false;
-
-    private void Awake()
-    {
-        if (instance)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        DontDestroyOnLoad(gameObject);
-        instance = this;
-    }
 
     void Start()
     {
