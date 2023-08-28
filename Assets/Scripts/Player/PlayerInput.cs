@@ -13,7 +13,7 @@ public class PlayerInput : MonoBehaviour
         if (!GameManager.instance) return;
         if (GameManager.instance.m_gameStatus == GameManager.GameStatus.Active)
         {
-            if (m_inputManager.tapDownThisFrame)
+            if (m_inputManager.safeTapDownThisFrame)
             {
                 m_playerJump.jump(m_playerSize.getData());
                 m_playerSize.switchSize();

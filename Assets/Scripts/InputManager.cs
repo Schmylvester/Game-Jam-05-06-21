@@ -1,8 +1,11 @@
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class InputManager : MonoBehaviour
 {
-    public bool tapDownThisFrame { get; private set; }
+    public bool safeTapDownThisFrame { get; private set; }
+    public bool unsafeTapDownThisFrame { get; private set; }
     public bool tapUpThisFrame { get; private set; }
     bool lastFrame;
 
@@ -18,13 +21,8 @@ public class InputManager : MonoBehaviour
 
     void checkMouse()
     {
-        tapDownThisFrame = Input.GetMouseButtonDown(0);
         tapUpThisFrame = Input.GetMouseButtonUp(0);
-    }
-
-    public void clearInputThisFrame()
-    {
-        tapDownThisFrame = false;
-        tapUpThisFrame = false;
+        safeTapDownThisFrame = Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject();
+        unsafeTapDownThisFrame = Input.GetMouseButtonDown(0);
     }
 }

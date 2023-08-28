@@ -1,8 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class ScoreManager : MonoBehaviour
 {
+    [HideInInspector] public UnityEvent<int> m_onScoreChange;
     [SerializeField] TutorialManager m_tutorialManager = null;
     [SerializeField] AudioSource m_scoreSound = null;
     [SerializeField] Text m_scoreUI = null;
@@ -22,6 +24,7 @@ public class ScoreManager : MonoBehaviour
             } else {
                 m_score++;
                 m_scoreUI.text = m_score.ToString();
+                m_onScoreChange.Invoke(m_score);
             }
         }
     }
