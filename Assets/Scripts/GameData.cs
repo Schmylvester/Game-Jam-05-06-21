@@ -12,9 +12,14 @@ public class GameData : Singleton<GameData>
     }
     string m_filePath;
     [SerializeField] bool m_clearDataOnPlay = false;
+    [SerializeField] private bool m_webBuild = false;
 
     void Start()
     {
+        if (m_webBuild) {
+            populateFakeHighScores();
+            return;
+        }
         m_filePath = Application.persistentDataPath + "/" + "highScores.txt";
         if (File.Exists(m_filePath) && !m_clearDataOnPlay)
         {
@@ -99,6 +104,9 @@ public class GameData : Singleton<GameData>
 
     void saveData()
     {
+        if (m_webBuild) {
+            return;
+        }
         DataToLoad data = new DataToLoad()
         {
             highScoreData = HighScoreManager.instance.getHighScores()

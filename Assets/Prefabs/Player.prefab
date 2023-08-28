@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5893485928288896532}
   - component: {fileID: 5893485928288896555}
   - component: {fileID: 5893485928288896533}
+  - component: {fileID: 1509747492}
   m_Layer: 0
   m_Name: PlayerRender
   m_TagString: Untagged
@@ -27,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 5893485928288896554}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.02, y: 0.16, z: 0}
-  m_LocalScale: {x: 0.03, y: 0.03, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5893485929394524527}
@@ -74,7 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 9564ce9bc6ee6d64b87fd5f89d740062, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e863b968b0067f24f9274483bb96ec3c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -105,6 +106,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1509747492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5893485928288896554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ec1f639f8f0b9c4aa20d30de3477c32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_animator: {fileID: 5893485928288896533}
 --- !u!1 &5893485929394524526
 GameObject:
   m_ObjectHideFlags: 0
@@ -172,7 +186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af855d6a6cce42448a439277978347fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_playerAnimator: {fileID: 0}
+  m_playerAnimator: {fileID: 1509747492}
   m_params: {fileID: 5893485929394524523}
 --- !u!114 &5893485929394524521
 MonoBehaviour:
@@ -186,7 +200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc631491b764ee84bb16f8793aef0836, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_playerAnimator: {fileID: 0}
+  m_playerAnimator: {fileID: 1509747492}
 --- !u!114 &5893485929394524523
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -225,6 +239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff6efb1909771244e8cd61dd8d9cc021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_playerAnimator: {fileID: 1509747492}
   m_deathSound: {fileID: 0}
 --- !u!114 &5893485929394524503
 MonoBehaviour:
@@ -238,6 +253,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a194837cb3a0334ea5765b21415dc31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_onScoreChange:
+    m_PersistentCalls:
+      m_Calls: []
   m_tutorialManager: {fileID: 0}
   m_scoreSound: {fileID: 0}
   m_scoreUI: {fileID: 0}
