@@ -3501,7 +3501,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: a14e6adf68ae8a045a1f96ef96f46563, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 64a150a0006b0144e8bd8924900a5cb6, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.45
   m_Pitch: 1
@@ -5709,7 +5709,7 @@ MonoBehaviour:
   - name: small
     _endPos: -11
     _nextSpawnPos: -5
-    _speedMod: 1
+    _speedMod: 1.2
   - name: long
     _endPos: -20.5
     _nextSpawnPos: -15
