@@ -24,6 +24,10 @@ public class PlayerSize : MonoBehaviour
         return m_isBig ? m_params.m_bigData : m_params.m_smallData;
     }
 
+    public bool isBig() {
+        return m_isBig;
+    }
+
     IEnumerator grow()
     {
         m_coroutineActive = true;

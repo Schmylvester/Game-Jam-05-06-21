@@ -10,7 +10,6 @@ public struct SizeData
     public float jumpForce;
     public float gravForce;
     public float hoverTime;
-    public AudioSource audio;
 }
 
 public class PlayerParams : MonoBehaviour

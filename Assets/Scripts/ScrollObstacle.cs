@@ -33,6 +33,7 @@ public class ScrollObstacle : Scroll
 
     protected override void resetPosition(GameObject element)
     {
+        element.SetActive(false);
         m_elements = new GameObject[0];
         base.resetPosition(element);
     }
@@ -92,6 +93,7 @@ public class ScrollObstacle : Scroll
         }
 
         GameObject selectedObstacle = m_scrollableObstacles[m_currentObstacleIndex];
+        selectedObstacle.SetActive(true);
         m_elements = new GameObject[] { selectedObstacle };
     }
 }

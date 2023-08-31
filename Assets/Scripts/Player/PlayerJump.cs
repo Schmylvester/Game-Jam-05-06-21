@@ -14,6 +14,7 @@ using UnityEngine;
 public class PlayerJump : MonoBehaviour
 {
     [SerializeField] PlayerAnimator m_playerAnimator;
+    [SerializeField] private PlayerAudioManager m_playerAudioManager = null;
     float m_groundLevel = 0.0f;
     float m_gravityForce = 0.0f;
     float m_verticalSpeed = 0.0f;
@@ -33,8 +34,9 @@ public class PlayerJump : MonoBehaviour
             m_verticalSpeed = _data.jumpForce;
             m_gravityForce = _data.gravForce;
             m_hoverTime = _data.hoverTime;
-            _data.audio.Play();
+            m_playerAudioManager.jump();
         }
+        m_playerAudioManager.resize();
     }
 
     public void cancelJump()
@@ -68,6 +70,11 @@ public class PlayerJump : MonoBehaviour
 
     void setState(JumpState _state)
     {
+        if (_state == JumpState.Hovering) {
+            m_playerAudioManager.startHover();
+        } else if (m_state == JumpState.Hovering) {
+            m_playerAudioManager.endHover();
+        }
         m_state = _state;
         m_playerAnimator.setState(_state);
     }

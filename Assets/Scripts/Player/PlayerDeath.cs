@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerDeath : MonoBehaviour
 {
     [SerializeField] PlayerAnimator m_playerAnimator = null;
-    [SerializeField] AudioSource m_deathSound = null;
+    [SerializeField] PlayerAudioManager m_audioManager = null;
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Obstacle"
@@ -16,7 +16,7 @@ public class PlayerDeath : MonoBehaviour
     }
 
     void die() {
-        m_deathSound.Play();
+        m_audioManager.death();
         GameManager.instance.gameOver();
         m_playerAnimator.die();
     }

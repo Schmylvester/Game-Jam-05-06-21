@@ -6,7 +6,7 @@ public class ScoreManager : MonoBehaviour
 {
     [HideInInspector] public UnityEvent<int> m_onScoreChange;
     [SerializeField] TutorialManager m_tutorialManager = null;
-    [SerializeField] AudioSource m_scoreSound = null;
+    [SerializeField] PlayerAudioManager m_audioManager = null;
     [SerializeField] Text m_scoreUI = null;
     int m_score = 0;
     int m_tutorialScore = 0;
@@ -14,7 +14,7 @@ public class ScoreManager : MonoBehaviour
     {
         if (collision.gameObject.tag == "ScoreCheck")
         {
-            m_scoreSound.Play();
+            m_audioManager.score();
             if (m_tutorialManager.tutorialActive()) {
                 ++m_tutorialScore;
                 if (m_tutorialScore % 2 == 0)

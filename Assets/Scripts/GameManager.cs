@@ -52,6 +52,7 @@ public class GameManager : MonoBehaviour
         else
         {
             m_gameOverObject.SetActive(true);
+            m_tutorialManager.gameObject.SetActive(false);
             m_gameStatus = GameStatus.GameOver;
         }
         HighScoreManager.instance.assignHighScore(m_scoreManager.getScore());
